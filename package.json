@@ -26,7 +26,9 @@
   },
   "homepage": "https://github.com/northcoders/BE2-NC-Knews#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "chai": "^4.2.0",
+    "express": "^4.16.4",
     "knex": "^0.15.2",
     "mocha": "^6.0.1",
     "pg": "^7.8.1"
