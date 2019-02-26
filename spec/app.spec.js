@@ -41,4 +41,24 @@ describe.only('/api', () => {
         );
       });
   });
+  describe('/articles', () => {
+    it('GET status:200 - serves up an array of article objects', () => request.get('/api/articles').expect(200));
+    it('GET status:200 - serves up articles', () => request
+      .get('/api/articles')
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).to.be.an('array');
+        expect(res.body.articles[0]).to.contain.keys(
+          'author',
+          'title',
+          'article_id',
+          'topic',
+          'created_at',
+          'votes',
+          'comment_count',
+          'body',
+        );
+        expect(res.body.articles[0]).to.be.an('Object');
+      }));
+  });
 });

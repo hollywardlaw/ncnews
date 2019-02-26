@@ -19,7 +19,8 @@ exports.createRef = (dataArray, key1, key2) => {
 exports.replaceTitlesWithID = (dataArray, refObject, deleteKey, addKey) => {
   const replacedArray = [...dataArray];
   const correctArray = [];
-  replacedArray.forEach((item) => {
+  replacedArray.forEach((original) => {
+    const item = { ...original };
     item[addKey] = refObject[item[deleteKey]];
     delete item[deleteKey];
     correctArray.push(item);
@@ -28,11 +29,9 @@ exports.replaceTitlesWithID = (dataArray, refObject, deleteKey, addKey) => {
   return correctArray;
 };
 
-exports.createAuthor = (array) => {
-  const copyArray = [...array];
-  copyArray.map((object) => {
-    object.author = object.created_by;
-    delete object.created_by;
-  });
-  return copyArray;
-};
+exports.createAuthor = array => array.map((original) => {
+  const object = { ...original };
+  object.author = object.created_by;
+  delete object.created_by;
+  return object;
+});
