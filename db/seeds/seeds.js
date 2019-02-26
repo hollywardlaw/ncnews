@@ -1,5 +1,10 @@
 const { topicData, userData, articleData, commentData } = require('../data');
-const { getDate } = require('../../utils');
+const {
+  getDate,
+  createRef,
+  replaceTitlesWithID,
+  createAuthor
+} = require('../../utils');
 
 exports.seed = (knex, Promise) =>
   knex.migrate
@@ -22,7 +27,21 @@ exports.seed = (knex, Promise) =>
                 .into('articles')
                 .returning('*')
                 .then(articleRows => {
-                  const formattedCommentData = getDate(commentData);
+                  const articleRefs = createRef(
+                    articleRows,
+                    'title',
+                    'article_id'
+                  );
+                  const commentsWithArticleIDs = replaceTitlesWithID(
+                    commentData,
+                    articleRefs,
+                    'belongs_to',
+                    'article_id'
+                  );
+                  const commentsWithAuthors = createAuthor(
+                    commentsWithArticleIDs
+                  );
+                  const formattedCommentData = getDate(commentsWithAuthors);
                   return knex
                     .insert(formattedCommentData)
                     .into('comments')
