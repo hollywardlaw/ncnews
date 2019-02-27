@@ -41,16 +41,15 @@ For each thing that could go wrong, make a test with your expected status code a
 - No `slug` / `description` in request body 
   - status:400 
 - `slug` that already exists in the database
-
+  - status:422
 
 ### GET `/api/articles`
 
 - Bad queries:
   - `sort_by` a column that doesn't exist
   - `order` !== "asc" / "desc"
-  - `author` / `topic` that is not in the database
-  - `author` / `topic` that exists but does not have any articles associated with it
-400 
+  - `author` / `topic` that is not in the database - 404
+  - `author` / `topic` that exists but does not have any articles associated with it 200 {}
 
 ### POST `/api/articles`
 
@@ -60,8 +59,8 @@ For each thing that could go wrong, make a test with your expected status code a
 
 ### GET `/api/articles/:article_id`
 
-- Bad `article_id` (e.g. `/dog`)
-- Well formed `article_id` that doesn't exist in the database (e.g. `/999999`)
+- Bad `article_id` (e.g. `/dog`) 400
+- Well formed `article_id` that doesn't exist in the database (e.g. `/999999`) 404
 
 ### PATCH `/api/articles/:article_id`
 
