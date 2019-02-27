@@ -4,7 +4,7 @@ const app = require('../app');
 const request = require('supertest')(app);
 const connection = require('../db/connection');
 
-describe.only('/api', () => {
+describe('/api', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
   describe('/topics', () => {
@@ -60,5 +60,18 @@ describe.only('/api', () => {
         );
         expect(res.body.articles[0]).to.be.an('Object');
       }));
+    it('Takes an author query which filters the articles by the username value specified in the query', () => {
+      request.get('/api/articles?author=butter_bridge').expect(200).then((res) => {
+        expect(res.body.articles).to.have.length(3)
+          .expect(res.body.articles[0]).to.contain.keys('author',
+            'title',
+            'article_id',
+            'topic',
+            'created_at',
+            'votes',
+            'comment_count',
+            'body');
+      });
+    });
   });
 });
