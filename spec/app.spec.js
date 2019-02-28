@@ -115,6 +115,15 @@ describe('/api', () => {
     it('if invalid method is used, sends a 405 status and an error message', () => request.delete('/api/articles').expect(405).then((res) => {
       expect(res.body.msg).to.equal('Error 405: invalid method');
     }));
+    it('should sort the articles by date by default if no sort_by query is passed', () => request.get('/api/articles').expect(200).then((res) => {
+      expect(res.body.articles[0].created_at).to.equal('2018-11-15T00:00:00.000Z');
+    }));
+    it('should accept a sort_by query, which sorts the articles by any valid column', () => request.get('/api/articles?sort_by=article_id').expect(200).then((res) => {
+      expect(res.body.articles[0].article_id).to.equal(12);
+    }));
+    it('Should accept an `order` query, which can be set to `asc` or `desc` for ascending or descending (defaults to descending)', () => request.get('/api/articles?sort_by=article_id&order=asc').expect(200).then((res) => {
+      expect(res.body.articles[0].article_id).to.equal(1);
+    }));
   });
 });
 
