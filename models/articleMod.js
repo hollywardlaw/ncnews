@@ -18,3 +18,5 @@ exports.getArticles = ({
   }
   return articleQuery;
 };
+
+exports.addNewArticle = article => connection('articles').insert(article).returning('*');

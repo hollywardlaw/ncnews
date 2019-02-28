@@ -130,6 +130,47 @@ describe('/api', () => {
     it('GET status: 404. if `order` is not asc or desc, sends a 404 status and throws an error message', () => request.get('/api/aticles?sort_by=article_id&order=invalid_order').expect(404).then((res) => {
       expect(res.body.msg).to.equal('Error 404: page not found');
     }));
+    it('POST status: 201 - adds a new article.', () => {
+      const newArticle = {
+        title: 'New article',
+        body: 'Hello I am an article',
+        topic: 'mitch',
+        author: 'icellusedkars',
+      };
+      return request.post('/api/articles').send(newArticle).expect(201).then((res) => {
+        expect(res.body).to.have.all.keys('article');
+        expect(res.body.article).to.be.an('object');
+        expect(res.body.article.title).to.equal(
+          newArticle.title,
+        );
+        expect(res.body.article.body).to.equal(
+          newArticle.body,
+        );
+        expect(res.body.article.topic).to.equal(newArticle.topic);
+        expect(res.body.article.author).to.equal(newArticle.author);
+      });
+    });
+    it('POST status 400 - if No `title` / `body` / `topic` / `username` in request body sends a 400 status and an error message Error 400: bad request', () => {
+      const newArticle = {
+        body: 'Hello I am an article',
+        topic: 'mitch',
+        author: 'icellusedkars',
+      };
+      return request.post('/api/articles').send(newArticle).expect(400).then((res) => {
+        expect(res.body.msg).to.equal('Error 400: bad request');
+      });
+    });
+    it('POST status 422 - if topic/author doesnt exist, send an error 422', () => {
+      const newArticle = {
+        title: 'New article',
+        body: 'Hello I am an article',
+        topic: 'mitch',
+        author: 'holly',
+      };
+      return request.post('/api/articles').send(newArticle).expect(422).then((res) => {
+        expect(res.body.msg).to.equal('Error 422: Unprocessable Entity');
+      });
+    });
   });
 });
 
