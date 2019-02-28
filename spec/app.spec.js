@@ -184,9 +184,12 @@ describe('/api', () => {
       });
     }));
     it('GET status: 400. Bad `article_id` (e.g. `/dog`) returns status 400 and an error message', () => request.get('/api/articles/cat').expect(400));
-    it.only('PATCH status: 200. PATCH /api/articles/:article_id updated the votes on the article and responds with the updated article', () => request.patch('/api/articles/12').send({ inc_votes: 1 }).expect(200).then((res) => {
+    it('PATCH status: 200. PATCH /api/articles/:article_id updated the votes on the article and responds with the updated article', () => request.patch('/api/articles/12').send({ inc_votes: 1 }).expect(200).then((res) => {
       expect(res.body.article.votes).to.equal(1);
     }));
+    it('PATCH status: 400. If invalid `inc_votes` on request body, it sends a 400 status and an error message', () => request.patch('/api/articles/12').send({ inc_votes: 'cat' }).expect(400));
+    it('PATCH status: 400. If no `inc_votes` on request body, it sends a 400 status and an error message', () => request.patch('/api/articles/12').send({}).expect(400));
+    // it('PATCH status: 400. Some other property on request body (e.g. `{ inc_votes : "cat", name: Mitch }`) - 400, it sends a 400 status and an error message', () => request.patch('/api/articles/12').send({ inc_votes: 1, name: 'Mitch' }).expect(400));
   });
 });
 
