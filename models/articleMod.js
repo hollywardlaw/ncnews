@@ -2,7 +2,7 @@ const connection = require('../db/connection');
 
 exports.getArticles = ({
   author, topic, sort_by = 'created_at', order = 'desc',
-}) => {
+}, { article_id }) => {
   const articleQuery = connection
     .select('articles.*')
     .count({ comment_count: 'comment_id' })
@@ -15,6 +15,9 @@ exports.getArticles = ({
   }
   if (topic) {
     articleQuery.where({ 'articles.topic': topic });
+  }
+  if (article_id) {
+    articleQuery.where({ 'articles.article_id': article_id });
   }
   return articleQuery;
 };

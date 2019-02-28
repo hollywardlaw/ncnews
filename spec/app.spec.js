@@ -171,6 +171,18 @@ describe('/api', () => {
         expect(res.body.msg).to.equal('Error 422: Unprocessable Entity');
       });
     });
+    it('GET status: 200. accepts an article_id parameter which responds with the article', () => request.get('/api/articles/12').expect(200).then((res) => {
+      expect(res.body.articles[0]).to.eql({
+        article_id: 12,
+        title: 'Moustache',
+        body: 'Have you seen the size of that thing?',
+        votes: 0,
+        topic: 'mitch',
+        author: 'butter_bridge',
+        created_at: '1974-11-26T00:00:00.000Z',
+        comment_count: '0',
+      });
+    }));
   });
 });
 

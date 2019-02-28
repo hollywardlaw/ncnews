@@ -4,9 +4,10 @@ exports.sendArticles = (req, res, next) => {
   const {
     author, topic, sort_by, order,
   } = req.query;
+  const { article_id } = req.params;
   getArticles({
     author, topic, sort_by, order,
-  }).then((articles) => {
+  }, { article_id }).then((articles) => {
     res.status(200).send({ articles });
   }).catch(next);
 };

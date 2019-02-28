@@ -4,6 +4,7 @@ const { handle405 } = require('../error handling/index');
 
 
 articlesRouter.get('/', sendArticles);
+articlesRouter.get('/:article_id', sendArticles);
 articlesRouter.post('/', postArticles);
 articlesRouter.all('/', handle405);
 
