@@ -183,6 +183,7 @@ describe('/api', () => {
         comment_count: '0',
       });
     }));
+    it('GET status: 400. Bad `article_id` (e.g. `/dog`) returns status 400 and an error message', () => request.get('/api/articles/cat').expect(400));
   });
 });
 
