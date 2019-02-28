@@ -64,9 +64,9 @@ For each thing that could go wrong, make a test with your expected status code a
 
 ### PATCH `/api/articles/:article_id`
 
-- No `inc_votes` on request body
-- Invalid `inc_votes` (e.g. `{ inc_votes : "cat" }`)
-- Some other property on request body (e.g. `{ inc_votes : "cat", name: 'Mitch' }`)
+- No `inc_votes` on request body - 400
+- Invalid `inc_votes` (e.g. `{ inc_votes : "cat" }` ) - 400
+- Some other property on request body (e.g. `{ inc_votes : "cat", name: 'Mitch' }`) - 400
 
 ### DELETE `/api/articles/:article_id`
 
