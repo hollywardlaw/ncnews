@@ -5,7 +5,6 @@ const request = require('supertest')(app);
 const connection = require('../db/connection');
 
 describe('/api', () => {
-
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
 
@@ -208,21 +207,20 @@ describe('/api', () => {
       expect(res.body.length).to.equal(2);
       expect(res.body[0]).to.contain.keys('comment_id', 'author', 'article_id', 'votes', 'created_at', 'body');
     }));
-    it('Get status: 200. It sorts comments by date if no sort_by query secified.', () => {
-      return request.get('/api/articles/9/comments').expect(200).then((res) => {
-        expect(res.body[0].created_at).to.equal('2017-11-22T00:00:00.000Z');
-      });
-    });
-    it('GET status: 200: It accepts a sort_by query which sorts the articles by any valid column', () => {
-      return request.get('/api/articles/9/comments?sort_by=comment_id').expect(200).then((res) => {
-        expect(res.body[0].comment_id).to.equal(17);
-      });
-    });
-    it('GET status: 200. It accepts an order query which can be set to `asc` or `desc` for ascending or descending (defaults to descending)', () => {
-      return request.get('/api/articles/9/comments?sort_by=comment_id&order=asc').expect(200).then((res) => {
-        expect(res.body[0].comment_id).to.equal(1);
-      });
-    });
+    it('Get status: 200. It sorts comments by date if no sort_by query secified.', () => request.get('/api/articles/9/comments').expect(200).then((res) => {
+      expect(res.body[0].created_at).to.equal('2017-11-22T00:00:00.000Z');
+    }));
+    it('GET status: 200: It accepts a sort_by query which sorts the articles by any valid column', () => request.get('/api/articles/9/comments?sort_by=comment_id').expect(200).then((res) => {
+      expect(res.body[0].comment_id).to.equal(17);
+    }));
+    it('GET status: 200. It accepts an order query which can be set to `asc` or `desc` for ascending or descending (defaults to descending)', () => request.get('/api/articles/9/comments?sort_by=comment_id&order=asc').expect(200).then((res) => {
+      expect(res.body[0].comment_id).to.equal(1);
+    }));
+    it('POST status: 201. posts a new comment and responds with status 201 and the posted comment.', () => request.post('/api/articles/9/comments').send({ author: 'butter_bridge', body: 'new comment' }).expect(201).then((res) => {
+      expect(res.body.comment.body).to.equal('new comment');
+      expect(res.body.comment.author).to.equal('butter_bridge');
+      expect(res.body.comment.article_id).to.equal(9);
+    }));
   });
 });
 

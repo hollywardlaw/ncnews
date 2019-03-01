@@ -2,7 +2,7 @@ const articlesRouter = require('express').Router();
 const {
   sendArticles, postArticles, patchArticle, deleteArticle,
 } = require('../controllers/articleCon');
-const { sendCommentsByArticleID } = require('../controllers/commentCon');
+const { sendCommentsByArticleID, postComment } = require('../controllers/commentCon');
 const { handle405 } = require('../error handling/index');
 
 articlesRouter.route('/')
@@ -16,7 +16,8 @@ articlesRouter.route('/:article_id')
   .delete(deleteArticle);
 
 articlesRouter.route('/:article_id/comments')
-  .get(sendCommentsByArticleID);
+  .get(sendCommentsByArticleID)
+  .post(postComment);
 
 
 module.exports = articlesRouter;

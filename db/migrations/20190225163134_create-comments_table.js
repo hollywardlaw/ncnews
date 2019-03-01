@@ -6,7 +6,7 @@ exports.up = function (knex, Promise) {
       .foreign('author')
       .references('username')
       .on('users');
-    commentsTable.integer('article_id');
+    commentsTable.integer('article_id').notNullable();
     commentsTable
       .foreign('article_id')
       .references('article_id')
