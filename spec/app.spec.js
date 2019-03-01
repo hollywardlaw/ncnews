@@ -5,8 +5,10 @@ const request = require('supertest')(app);
 const connection = require('../db/connection');
 
 describe('/api', () => {
+
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
+
   describe('/topics', () => {
     it('GET status:200 - serves up an array of topic objects', () => request.get('/api/topics').expect(200));
   });
@@ -69,6 +71,7 @@ describe('/api', () => {
   it('if invalid method is used, sends a 405 status and an error message', () => request.delete('/api/topics').expect(405).then((res) => {
     expect(res.body.msg).to.equal('Error 405: invalid method');
   }));
+
   describe('/articles', () => {
     it('GET status:200 - serves up an array of article objects', () => request.get('/api/articles').expect(200));
     it('GET status:200 - serves up articles', () => request
@@ -199,11 +202,27 @@ describe('/api', () => {
       request.delete('./api/articles/cat').expect(400);
     });
   });
+
   describe('/articles/:article_id/comments', () => {
     it('GET status: 200. Responds with status 200 and an array of comments for the given `article_id`', () => request.get('/api/articles/9/comments').expect(200).then((res) => {
       expect(res.body.length).to.equal(2);
       expect(res.body[0]).to.contain.keys('comment_id', 'author', 'article_id', 'votes', 'created_at', 'body');
     }));
+    it('Get status: 200. It sorts comments by date if no sort_by query secified.', () => {
+      return request.get('/api/articles/9/comments').expect(200).then((res) => {
+        expect(res.body[0].created_at).to.equal('2017-11-22T00:00:00.000Z');
+      });
+    });
+    it('GET status: 200: It accepts a sort_by query which sorts the articles by any valid column', () => {
+      return request.get('/api/articles/9/comments?sort_by=comment_id').expect(200).then((res) => {
+        expect(res.body[0].comment_id).to.equal(17);
+      });
+    });
+    it('GET status: 200. It accepts an order query which can be set to `asc` or `desc` for ascending or descending (defaults to descending)', () => {
+      return request.get('/api/articles/9/comments?sort_by=comment_id&order=asc').expect(200).then((res) => {
+        expect(res.body[0].comment_id).to.equal(1);
+      });
+    });
   });
 });
 
