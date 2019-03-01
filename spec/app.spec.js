@@ -7,7 +7,16 @@ const connection = require('../db/connection');
 describe('/api', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
-
+  describe('/bad-url', () => {
+    it('GET status:404 responds with error message when request is made with a bad url', () => request
+      .get('/bad-url')
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).to.equal(
+          'Error 404: page not found',
+        );
+      }));
+  });
   describe('/topics', () => {
     it('GET status:200 - serves up an array of topic objects', () => request.get('/api/topics').expect(200));
   });
@@ -233,18 +242,7 @@ describe('/api', () => {
       expect(res.body.comment.votes).to.equal(15);
     });
   });
-});
-
-describe('/bad-url', () => {
-  beforeEach(() => connection.seed.run());
-  after(() => connection.destroy());
-
-  it('GET status:404 responds with error message when request is made with a bad url', () => request
-    .get('/bad-url')
-    .expect(404)
-    .then((res) => {
-      expect(res.body.msg).to.equal(
-        'Error 404: page not found',
-      );
-    }));
+  it('DELETE status: 204. deletes the given comment by `comment_id` and responds with 204 status', () => {
+    return request.delete('/api/articles/9/comments/1').expect(204);
+  });
 });

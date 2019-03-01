@@ -1,4 +1,6 @@
-const { getCommentsByArticle_ID, addNewComment, updateComment } = require('../models/commentMod');
+const {
+  getCommentsByArticle_ID, addNewComment, updateComment, removeComment,
+} = require('../models/commentMod');
 
 exports.sendCommentsByArticleID = (req, res, next) => {
   const { sort_by, order } = req.query;
@@ -21,5 +23,12 @@ exports.patchComment = (req, res, next) => {
   const { comment_id } = req.params;
   updateComment(comment_id, inc_votes).then(([comment]) => {
     res.status(200).send({ comment });
+  }).catch(next);
+};
+
+exports.deleteComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  removeComment(comment_id).then(() => {
+    res.sendStatus(204);
   }).catch(next);
 };

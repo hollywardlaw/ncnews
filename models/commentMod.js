@@ -15,3 +15,5 @@ exports.updateComment = (comment_id, inc_votes) => connection
   .where({ comment_id })
   .increment('votes', inc_votes)
   .returning('*');
+
+exports.removeComment = comment_id => connection.from('comments').where({ comment_id }).del();
