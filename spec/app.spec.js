@@ -222,9 +222,23 @@ describe('/api', () => {
       expect(res.body.comment.article_id).to.equal(9);
     }));
   });
+
+  describe('/comments/:comment_id', () => {
+    it('PATCH status: 200. Respnds with the updated comment and a 200 status code.', () => request.patch('/api/articles/9/comments/1').send({ inc_votes: 1 }).expect(200).then((res) => {
+      expect(res.body.comment.votes).to.equal(17);
+    }));
+  });
+  it('PATCH status: 200. Works for negative votes to decrease amount of votes', () => {
+    request.patch('/api/articles/9/comments/1').send({ inc_votes: -1 }).expect(200).then((res) => {
+      expect(res.body.comment.votes).to.equal(15);
+    });
+  });
 });
 
 describe('/bad-url', () => {
+  beforeEach(() => connection.seed.run());
+  after(() => connection.destroy());
+
   it('GET status:404 responds with error message when request is made with a bad url', () => request
     .get('/bad-url')
     .expect(404)
