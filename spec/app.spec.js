@@ -191,7 +191,21 @@ describe('/api', () => {
       expect(res.body.article.votes).to.equal(-1);
     }));
     it('PATCH status: 400. If invalid `inc_votes` on request body, it sends a 400 status and an error message', () => request.patch('/api/articles/12').send({ inc_votes: 'cat' }).expect(400));
-    it('PATCH status: 400. If no `inc_votes` on request body, it sends a 400 status and an error message', () => request.patch('/api/articles/12').send({}).expect(400));
+    it('DELETE status: 204. Deletes an article by article ID and responds with status 204 and no content ', () => request.delete('/api/articles/12').expect(204));
+    it('DELETE status: 404. Sends a 404 status if the article_id doesnt exist in the db', () => {
+      request.delete('/api/articles/99999').expect(404);
+    });
+    it('DELETE status: 400. Sends a 400 status if article_id isnt a number', () => {
+      request.delete('./api/articles/cat').expect(400);
+    });
+  });
+  describe('/articles/:article_id/comments', () => {
+    it('GET status: 200. Responds with status 200 and an array of comments for the given `article_id`', () => {
+      return request.get('/api/articles/9/comments').expect(200).then((res) => {
+        expect(res.body.length).to.equal(2);
+        expect(res.body[0]).to.contain.keys('comment_id', 'author', 'article_id', 'votes', 'created_at', 'body');
+      });
+    });
   });
 });
 

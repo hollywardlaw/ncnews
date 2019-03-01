@@ -1,4 +1,6 @@
-const { getArticles, addNewArticle, updateArticle } = require('../models/articleMod');
+const {
+  getArticles, addNewArticle, updateArticle, removeArticle,
+} = require('../models/articleMod');
 
 exports.sendArticles = (req, res, next) => {
   const {
@@ -7,7 +9,7 @@ exports.sendArticles = (req, res, next) => {
   const { article_id } = req.params;
   getArticles({
     author, topic, sort_by, order,
-  }, { article_id })
+  }, article_id)
     .then((articles) => {
       res.status(200).send({ articles });
     }).catch(next);
@@ -30,4 +32,11 @@ exports.patchArticle = (req, res, next) => {
       res.status(200).send({ article });
     }).catch(next);
   }
+};
+
+exports.deleteArticle = (req, res, next) => {
+  const { article_id } = req.params;
+  removeArticle(article_id).then(() => {
+    res.sendStatus(204);
+  }).catch(next);
 };
