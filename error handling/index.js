@@ -15,7 +15,9 @@ exports.handle400 = (err, req, res, next) => {
 };
 
 exports.handle422 = (err, req, res, next) => {
-  res.status(422).send({ msg: 'Error 422: Unprocessable Entity' });
+  const codes = { 23505: 'Error 422: Unprocessable Entity', 23503: 'Error 422: Unprocessable Entity' };
+  if (codes[err.code]) res.status(422).send({ msg: codes[err.code] });
+  else next(err);
 };
 
 exports.handle500 = (err, req, res, next) => {
