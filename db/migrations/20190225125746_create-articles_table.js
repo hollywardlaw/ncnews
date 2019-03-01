@@ -8,12 +8,12 @@ exports.up = function (knex, Promise) {
     articlesTable
       .foreign('topic')
       .references('slug')
-      .on('topics').onDelete('CASCADE');
+      .on('topics');
     articlesTable.string('author');
     articlesTable
       .foreign('author')
       .references('username')
-      .on('users').onDelete('CASCADE');
+      .on('users');
     articlesTable.date('created_at').defaultsTo(knex.fn.now());
   });
 };

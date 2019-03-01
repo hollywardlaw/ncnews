@@ -10,7 +10,8 @@ exports.up = function (knex, Promise) {
     commentsTable
       .foreign('article_id')
       .references('article_id')
-      .on('articles');
+      .on('articles')
+      .onDelete('CASCADE');
     commentsTable.integer('votes').defaultsTo(0);
     commentsTable.date('created_at').defaultsTo(knex.fn.now());
     commentsTable.text('body');
