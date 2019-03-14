@@ -279,5 +279,12 @@ describe('/api', () => {
           );
         });
     });
+    it('GET status: 200. accepts a username parameter which responds with the user', () => request.get('/api/users/butter_bridge').expect(200).then((res) => {
+      expect(res.body[0]).to.eql({
+        username: 'butter_bridge',
+        name: 'jonny',
+        avatar_url: 'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg',
+      });
+    }));
   });
 });
