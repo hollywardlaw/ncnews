@@ -242,7 +242,42 @@ describe('/api', () => {
       expect(res.body.comment.votes).to.equal(15);
     });
   });
-  it('DELETE status: 204. deletes the given comment by `comment_id` and responds with 204 status', () => {
-    return request.delete('/api/articles/9/comments/1').expect(204);
+  it('DELETE status: 204. deletes the given comment by `comment_id` and responds with 204 status', () => request.delete('/api/articles/9/comments/1').expect(204));
+
+  describe.only('GET /api/users', () => {
+    it('GET status:200 - serves up an array of user objects', () => request.get('/api/users').expect(200));
+    it('GET status:200 - serves up users', () => request
+      .get('/api/users')
+      .expect(200)
+      .then((res) => {
+        expect(res.body.users).to.be.an('array');
+        expect(res.body.users[0]).to.contain.keys(
+          'username',
+          'avatar_url',
+          'name',
+        );
+        expect(res.body.users[0]).to.be.an('Object');
+      }));
+    it('POST status: 201 - adds a new user', () => {
+      const newUser = {
+        username: 'Hollycat',
+        avatar_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/800px-Cat03.jpg',
+        name: 'Holly',
+      };
+      return request
+        .post('/api/users')
+        .send(newUser)
+        .expect(201)
+        .then((res) => {
+          expect(res.body).to.have.all.keys('user');
+          expect(res.body.user).to.be.an('object');
+          expect(res.body.user.name).to.equal(
+            newUser.name,
+          );
+          expect(res.body.user.username).to.equal(
+            newUser.username,
+          );
+        });
+    });
   });
 });
