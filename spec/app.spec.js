@@ -244,7 +244,7 @@ describe('/api', () => {
   });
   it('DELETE status: 204. deletes the given comment by `comment_id` and responds with 204 status', () => request.delete('/api/articles/9/comments/1').expect(204));
 
-  describe.only('GET /api/users', () => {
+  describe('GET /api/users', () => {
     it('GET status:200 - serves up an array of user objects', () => request.get('/api/users').expect(200));
     it('GET status:200 - serves up users', () => request
       .get('/api/users')
