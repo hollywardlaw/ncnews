@@ -18,8 +18,8 @@ describe('getDate', () => {
         created_at: 1471522072389,
       },
     ];
-    getDate(input);
-    expect(input[0].created_at).to.be.an.instanceOf(Date);
+    const output = getDate(input);
+    expect(output[0].created_at).to.be.an.instanceOf(Date);
   });
   it('Takes an array of multiple objects and converts all the timestamps into dates', () => {
     const input = [

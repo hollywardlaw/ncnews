@@ -1,9 +1,8 @@
 exports.getDate = (array) => {
-  const newArray = [...array];
-  newArray.map((object) => {
+  const newArray = array.map((object) => {
     const timestamp = object.created_at;
-    const date = new Date(timestamp);
-    object.created_at = date;
+    const newObject = { ...object, created_at: new Date(timestamp) };
+    return newObject;
   });
   return newArray;
 };

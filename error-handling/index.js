@@ -1,5 +1,9 @@
-exports.handle404 = (req, res) => {
-  res.status(404).send({ msg: 'Error 404: page not found' });
+exports.handle404 = (err, req, res, next) => {
+  if (err.status === 404) {
+    res.status(404).send({ msg: 'Error 404: page not found' });
+  } else {
+    next(err);
+  }
 };
 
 exports.handle405 = (req, res) => {
@@ -21,6 +25,7 @@ exports.handle422 = (err, req, res, next) => {
 };
 
 exports.handle500 = (err, req, res, next) => {
+  // eslint-disable-next-line no-console
   console.log(err);
   res.status(500).send({ msg: 'Something broke :(' });
 };

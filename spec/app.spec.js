@@ -1,7 +1,9 @@
 process.env.NODE_ENV = 'test';
 const { expect } = require('chai');
+const supertest = require('supertest');
 const app = require('../app');
-const request = require('supertest')(app);
+
+const request = supertest(app);
 const connection = require('../db/connection');
 
 describe('/api', () => {
@@ -202,12 +204,12 @@ describe('/api', () => {
       expect(res.body.article.votes).to.equal(-1);
     }));
     it('PATCH status: 400. If invalid `inc_votes` on request body, it sends a 400 status and an error message', () => request.patch('/api/articles/12').send({ inc_votes: 'cat' }).expect(400));
-    it.only('DELETE status: 204. Deletes an article by article ID and responds with status 204 and no content ', () => request.delete('/api/articles/1').expect(204).then((res) => {
+    it('DELETE status: 204. Deletes an article by article ID and responds with status 204 and no content ', () => request.delete('/api/articles/1').expect(204).then((res) => {
       request.get('/api/articles/1').expect(404);
     }));
-    it('DELETE status: 404. Sends a 404 status if the article_id doesnt exist in the db', () => {
-      request.delete('/api/articles/99999').expect(404);
-    });
+    it('DELETE status: 404. Sends a 404 status if the article_id doesnt exist in the db', () => request.delete('/api/articles/99999').expect(404).then((res) => {
+      expect(res.body).to.eql({ msg: 'Error 404: page not found' });
+    }));
     it('DELETE status: 400. Sends a 400 status if article_id isnt a number', () => {
       request.delete('./api/articles/cat').expect(400);
     });

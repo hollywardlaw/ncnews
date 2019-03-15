@@ -25,19 +25,22 @@ exports.postArticles = (req, res, next) => {
 exports.patchArticle = (req, res, next) => {
   const { inc_votes } = req.body;
   const { article_id } = req.params;
-  // if (typeof inc_votes !== 'number') {
-  //   res.status(400).send({ msg: 'Error 400: bad request' });
-  // } else {
-  updateArticle(article_id, inc_votes).then(([article]) => {
-    res.status(200).send({ article });
-  }).catch(next);
-  // }
+  if (typeof inc_votes !== 'number') {
+    res.status(400).send({ msg: 'Error 400: bad request' });
+  } else {
+    updateArticle(article_id, inc_votes).then(([article]) => {
+      res.status(200).send({ article });
+    }).catch(next);
+  }
 };
 
 exports.deleteArticle = (req, res, next) => {
   const { article_id } = req.params;
-  removeArticle(article_id).then((mystery) => {
-    console.log(mystery);
-    res.sendStatus(204);
+  removeArticle(article_id).then((deleteCount) => {
+    if (deleteCount === 0) {
+      next({ status: 404 });
+    } else {
+      res.sendStatus(204);
+    }
   }).catch(next);
 };

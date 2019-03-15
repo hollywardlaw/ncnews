@@ -6,8 +6,8 @@ exports.getCommentsByArticle_ID = (article_id, { sort_by = 'created_at', order =
   .orderBy(sort_by, order);
 
 exports.addNewComment = (newComment, article_id) => {
-  newComment.article_id = article_id;
-  return connection.from('comments').insert(newComment).returning('*');
+  const commentToInsert = { ...newComment, article_id };
+  return connection.from('comments').insert(commentToInsert).returning('*');
 };
 
 exports.updateComment = (comment_id, inc_votes = 0) => connection
