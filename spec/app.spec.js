@@ -202,7 +202,9 @@ describe('/api', () => {
       expect(res.body.article.votes).to.equal(-1);
     }));
     it('PATCH status: 400. If invalid `inc_votes` on request body, it sends a 400 status and an error message', () => request.patch('/api/articles/12').send({ inc_votes: 'cat' }).expect(400));
-    it('DELETE status: 204. Deletes an article by article ID and responds with status 204 and no content ', () => request.delete('/api/articles/1').expect(204));
+    it.only('DELETE status: 204. Deletes an article by article ID and responds with status 204 and no content ', () => request.delete('/api/articles/1').expect(204).then((res) => {
+      request.get('/api/articles/1').expect(404);
+    }));
     it('DELETE status: 404. Sends a 404 status if the article_id doesnt exist in the db', () => {
       request.delete('/api/articles/99999').expect(404);
     });

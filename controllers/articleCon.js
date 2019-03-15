@@ -36,7 +36,8 @@ exports.patchArticle = (req, res, next) => {
 
 exports.deleteArticle = (req, res, next) => {
   const { article_id } = req.params;
-  removeArticle(article_id).then(() => {
+  removeArticle(article_id).then((mystery) => {
+    console.log(mystery);
     res.sendStatus(204);
   }).catch(next);
 };
