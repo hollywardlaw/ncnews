@@ -137,8 +137,8 @@ describe('/api', () => {
     it('Should accept an `order` query, which can be set to `asc` or `desc` for ascending or descending (defaults to descending)', () => request.get('/api/articles?sort_by=article_id&order=asc').expect(200).then((res) => {
       expect(res.body.articles[0].article_id).to.equal(1);
     }));
-    it('GET status: 404. if `sort_by`column doesnt exist, sends a 404 status and throws an error message', () => request.get('/api/aticles?sort_by=invalid_column').expect(404).then((res) => {
-      expect(res.body.msg).to.equal('Error 404: page not found');
+    it('GET status: 400. if `sort_by`column doesnt exist, sends a 400 status and throws an error message', () => request.get('/api/articles?sort_by=invalid_column').expect(400).then((res) => {
+      expect(res.body.msg).to.equal('Error 400: bad request');
     }));
     it('GET status: 404. if `order` is not asc or desc, sends a 404 status and throws an error message', () => request.get('/api/aticles?sort_by=article_id&order=invalid_order').expect(404).then((res) => {
       expect(res.body.msg).to.equal('Error 404: page not found');
