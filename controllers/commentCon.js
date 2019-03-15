@@ -28,7 +28,11 @@ exports.patchComment = (req, res, next) => {
 
 exports.deleteComment = (req, res, next) => {
   const { comment_id } = req.params;
-  removeComment(comment_id).then(() => {
-    res.sendStatus(204);
+  removeComment(comment_id).then((deleteCount) => {
+    if (deleteCount === 0) {
+      next({ status: 404 });
+    } else {
+      res.sendStatus(204);
+    }
   }).catch(next);
 };
