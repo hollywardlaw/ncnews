@@ -10,7 +10,7 @@ exports.addNewComment = (newComment, article_id) => {
   return connection.from('comments').insert(newComment).returning('*');
 };
 
-exports.updateComment = (comment_id, inc_votes) => connection
+exports.updateComment = (comment_id, inc_votes = 0) => connection
   .from('comments')
   .where({ comment_id })
   .increment('votes', inc_votes)

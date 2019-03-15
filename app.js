@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const apiRouter = require('./routers/apiRouter');
 const {
   handle404, handle400, handle422, handle500,
-} = require('./error handling/index');
+} = require('./error-handling/index');
 
 app.use(bodyParser.json());
 

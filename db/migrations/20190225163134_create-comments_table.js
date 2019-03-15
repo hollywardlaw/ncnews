@@ -14,7 +14,7 @@ exports.up = function (knex, Promise) {
       .onDelete('CASCADE');
     commentsTable.integer('votes').defaultsTo(0);
     commentsTable.date('created_at').defaultsTo(knex.fn.now());
-    commentsTable.text('body');
+    commentsTable.text('body').notNullable();
   });
 };
 

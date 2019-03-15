@@ -24,7 +24,7 @@ exports.getArticles = ({
 
 exports.addNewArticle = article => connection('articles').insert(article).returning('*');
 
-exports.updateArticle = (article_id, inc_votes) => connection
+exports.updateArticle = (article_id, inc_votes = 0) => connection
   .from('articles')
   .where({ 'articles.article_id': article_id })
   .increment('votes', inc_votes)

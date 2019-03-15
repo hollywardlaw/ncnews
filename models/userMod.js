@@ -1,6 +1,6 @@
 const connection = require('../db/connection');
 
-exports.getUsers = users => connection
+exports.getUsers = () => connection
   .select('users.*')
   .from('users');
 
