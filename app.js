@@ -6,7 +6,7 @@ const {
   handle404,
   handle400,
   handle422,
-  handle500
+  handle500,
 } = require('./error-handling/index');
 
 app.use(cors());
