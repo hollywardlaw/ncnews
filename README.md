@@ -15,7 +15,9 @@ https://holly-nc-news.herokuapp.com/api
 
 `npm install`
 
-`npm run start` to open the project on the browser or 
+`npm run start` to open the project on the browser, this will run on localhost:9090 
+
+or 
 
 `npm run test` to run the test suite
 
