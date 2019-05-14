@@ -17,7 +17,7 @@ exports.getArticles = ({
     articleQuery.where({ 'articles.topic': topic });
   }
   if (article_id) {
-    articleQuery.where({ 'articles.article_id': article_id });
+    articleQuery.where({ 'articles.article_id': article_id }).first();
   }
   return articleQuery;
 };

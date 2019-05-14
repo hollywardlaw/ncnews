@@ -220,7 +220,7 @@ describe('/api', () => {
       .get('/api/articles/12')
       .expect(200)
       .then((res) => {
-        expect(res.body.articles[0]).to.eql({
+        expect(res.body.article).to.eql({
           article_id: 12,
           title: 'Moustache',
           body: 'Have you seen the size of that thing?',
@@ -232,6 +232,7 @@ describe('/api', () => {
         });
       }));
     it('GET status: 400. Bad `article_id` (e.g. `/dog`) returns status 400 and an error message', () => request.get('/api/articles/cat').expect(400));
+    it('GET status: 404. `article_id` that doesnt exist(e.g. `/1000`) returns status 404 and an error message', () => request.get('/api/articles/1000').expect(404));
     it('PATCH status: 200. PATCH /api/articles/:article_id updates the votes on the article and responds with the updated article', () => request
       .patch('/api/articles/12')
       .send({ inc_votes: 1 })
@@ -270,8 +271,7 @@ describe('/api', () => {
         .get('/api/articles/9/comments')
         .expect(200)
         .then((res) => {
-          expect(res.body.length).to.equal(2);
-          expect(res.body[0]).to.contain.keys(
+          expect(res.body.comments[0]).to.contain.keys(
             'comment_id',
             'author',
             'article_id',
@@ -284,19 +284,19 @@ describe('/api', () => {
         .get('/api/articles/9/comments')
         .expect(200)
         .then((res) => {
-          expect(res.body[0].created_at).to.equal('2017-11-22T00:00:00.000Z');
+          expect(res.body.comments[0].created_at).to.equal('2017-11-22T00:00:00.000Z');
         }));
       it('GET status: 200: It accepts a sort_by query which sorts the articles by any valid column', () => request
         .get('/api/articles/9/comments?sort_by=comment_id')
         .expect(200)
         .then((res) => {
-          expect(res.body[0].comment_id).to.equal(17);
+          expect(res.body.comments[0].comment_id).to.equal(17);
         }));
       it('GET status: 200. It accepts an order query which can be set to `asc` or `desc` for ascending or descending (defaults to descending)', () => request
         .get('/api/articles/9/comments?sort_by=comment_id&order=asc')
         .expect(200)
         .then((res) => {
-          expect(res.body[0].comment_id).to.equal(1);
+          expect(res.body.comments[0].comment_id).to.equal(1);
         }));
       it('POST status: 201. posts a new comment and responds with status 201 and the posted comment.', () => request
         .post('/api/articles/9/comments')
@@ -366,7 +366,7 @@ describe('/api', () => {
       .get('/api/users/butter_bridge')
       .expect(200)
       .then((res) => {
-        expect(res.body[0]).to.eql({
+        expect(res.body.user).to.eql({
           username: 'butter_bridge',
           name: 'jonny',
           avatar_url:

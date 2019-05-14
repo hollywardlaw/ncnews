@@ -11,8 +11,15 @@ exports.sendArticles = (req, res, next) => {
     author, topic, sort_by, order,
   }, article_id)
     .then((articles) => {
-      res.status(200).send({ articles });
-    }).catch(next);
+      if (article_id) {
+        if (articles === undefined) {
+          next({ status: 404 });
+        } else { res.status(200).send({ article: articles }); }
+      } else {
+        res.status(200).send({ articles });
+      }
+    })
+    .catch(next);
 };
 
 exports.postArticles = (req, res, next) => {
